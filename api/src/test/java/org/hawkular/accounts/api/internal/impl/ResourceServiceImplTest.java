@@ -22,7 +22,6 @@ import org.hawkular.accounts.api.model.Owner;
 import org.hawkular.accounts.api.model.Resource;
 import org.junit.Before;
 import org.junit.Test;
-import org.keycloak.KeycloakPrincipal;
 
 import java.util.UUID;
 
@@ -60,7 +59,7 @@ public class ResourceServiceImplTest extends BaseEntityManagerEnabledTest {
         entityManager.getTransaction().commit();
 
         entityManager.getTransaction().begin();
-        assertNotNull(resourceService.getById(resourceId));
+        assertNotNull(resourceService.get(resourceId));
         entityManager.getTransaction().commit();
     }
 
@@ -72,42 +71,25 @@ public class ResourceServiceImplTest extends BaseEntityManagerEnabledTest {
         entityManager.getTransaction().commit();
 
         entityManager.getTransaction().begin();
-        Resource resource = resourceService.getOrCreate(UUID.randomUUID().toString(), user);
+        Resource resource = resourceService.create(UUID.randomUUID().toString(), user);
         entityManager.getTransaction().commit();
 
         entityManager.getTransaction().begin();
-        assertNotNull(resourceService.getById(resource.getId()));
+        assertNotNull(resourceService.get(resource.getId()));
         entityManager.getTransaction().commit();
     }
 
     @Test
     public void nonExistingResourceIsCreatedWithCurrentUser() {
         entityManager.getTransaction().begin();
-        Resource resource = resourceService.getOrCreate(UUID.randomUUID().toString());
+        Resource resource = resourceService.create(UUID.randomUUID().toString());
         entityManager.getTransaction().commit();
 
         entityManager.getTransaction().begin();
-        Resource resourceFromDatabase = resourceService.getById(resource.getId());
+        Resource resourceFromDatabase = resourceService.get(resource.getId());
         assertNotNull(resourceFromDatabase);
         assertEquals(resourceFromDatabase.getOwner(), resourceService.user);
         entityManager.getTransaction().commit();
     }
 
-    @Test
-    public void nonExistingResourceIsCreatedWithPrincipal() {
-        entityManager.getTransaction().begin();
-        String userId = UUID.randomUUID().toString();
-        KeycloakPrincipal principal = new KeycloakPrincipal(userId, null);
-        Owner user = new HawkularUser(userId);
-        entityManager.persist(user);
-        entityManager.getTransaction().commit();
-
-        entityManager.getTransaction().begin();
-        Resource resource = resourceService.getOrCreate(UUID.randomUUID().toString(), principal);
-        entityManager.getTransaction().commit();
-
-        entityManager.getTransaction().begin();
-        assertNotNull(resourceService.getById(resource.getId()));
-        entityManager.getTransaction().commit();
-    }
 }

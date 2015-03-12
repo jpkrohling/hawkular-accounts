@@ -14,22 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hawkular.accounts.api.internal.adapter;
-
-import javax.inject.Qualifier;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
-
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-
 /**
- * CDI-qualifier for marking some produced resources as explicitly from Hawkular Accounts.
+ * Base implementation for the main API points.
  *
  * @author jpkroehling
  */
-@Qualifier
-@Retention(RUNTIME)
-@Target({METHOD, FIELD, PARAMETER, TYPE})
-public @interface HawkularAccounts {
-}
+package org.hawkular.accounts.api.internal.impl;

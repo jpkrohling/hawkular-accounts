@@ -14,22 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hawkular.accounts.api.internal.adapter;
+package org.hawkular.accounts.api;
 
-import javax.inject.Qualifier;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * CDI-qualifier for marking some produced resources as explicitly from Hawkular Accounts.
- *
  * @author jpkroehling
  */
-@Qualifier
 @Retention(RUNTIME)
-@Target({METHOD, FIELD, PARAMETER, TYPE})
-public @interface HawkularAccounts {
+@Target({METHOD, TYPE})
+public @interface SkipPermissionCheck {
 }

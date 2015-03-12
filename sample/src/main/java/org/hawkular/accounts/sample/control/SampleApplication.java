@@ -14,28 +14,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hawkular.accounts.api.internal.adapter;
+package org.hawkular.accounts.sample.control;
 
-import javax.persistence.AttributeConverter;
-import javax.persistence.Converter;
-import java.sql.Timestamp;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
+import org.hawkular.accounts.rest.PermissionCheckerFilter;
+import org.hawkular.accounts.sample.boundary.SampleService;
+
+import javax.ws.rs.ApplicationPath;
+import javax.ws.rs.core.Application;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
- * JPA adapter for handling {@link java.time.ZonedDateTime} objects converting to/from {@link java.sql.Timestamp}
+ * Integration point with JAX-RS. Specifies that we have a JAX-RS application, on the namespace "/".
  *
  * @author Juraci Paixão Kröhling <juraci at kroehling.de>
  */
-@Converter(autoApply = true)
-public class ZonedDateTimeAdapter implements AttributeConverter<ZonedDateTime, Timestamp> {
-    @Override
-    public Timestamp convertToDatabaseColumn(ZonedDateTime attribute) {
-        return Timestamp.valueOf(attribute.toLocalDateTime());
-    }
+@ApplicationPath("/")
+public class SampleApplication extends Application {
+    private Set<Class<?>> classes = new HashSet<>();
 
     @Override
-    public ZonedDateTime convertToEntityAttribute(Timestamp dbData) {
-        return ZonedDateTime.of(dbData.toLocalDateTime(), ZoneOffset.UTC);
+    public Set<Class<?>> getClasses() {
+        classes.add(PermissionCheckerFilter.class);
+        classes.add(SampleService.class);
+        return classes;
     }
 }

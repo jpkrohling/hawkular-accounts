@@ -14,17 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hawkular.accounts.sample.control;
+package org.hawkular.accounts.api;
 
-import javax.ws.rs.ApplicationPath;
-import javax.ws.rs.core.Application;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
+import static java.lang.annotation.ElementType.PARAMETER;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Integration point with JAX-RS. Specifies that we have a JAX-RS application, on the namespace "/".
- *
- * @author Juraci Paixão Kröhling <juraci at kroehling.de>
+ * @author jpkroehling
  */
-@ApplicationPath("/")
-public class JaxRsActivator extends Application {
-
+@Retention(RUNTIME)
+@Target({PARAMETER})
+public @interface ResourceId {
 }

@@ -37,6 +37,7 @@
   <modules>
     <module>accounts</module>
     <module>api</module>
+    <module>rest-filters</module>
   </modules>
 
   <inceptionYear>2015</inceptionYear>

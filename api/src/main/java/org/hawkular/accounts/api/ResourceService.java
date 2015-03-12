@@ -18,7 +18,6 @@ package org.hawkular.accounts.api;
 
 import org.hawkular.accounts.api.model.Owner;
 import org.hawkular.accounts.api.model.Resource;
-import org.keycloak.KeycloakPrincipal;
 
 /**
  * Manages {@link org.hawkular.accounts.api.model.Resource}. A Resource can be anything that is meant to be protected
@@ -36,32 +35,29 @@ public interface ResourceService {
      * @param id the resource's ID
      * @return the existing {@link Resource} or null if the resource doesn't exists.
      */
-    Resource getById(String id);
+    Resource get(String id);
 
     /**
-     * Retrieves a {@link Resource} based on its ID or creates a new {@link Resource} if it doesn't exists.
+     * Creates a {@link Resource} based on its ID, owned by the specified {@link org.hawkular.accounts.api.model.Owner}
      *
      * @param id    the resource's ID
      * @param owner if the resource doesn't exists, a new one is created with the specified owner
-     * @return the existing {@link Resource} or a new one if it doesn't exists yet.
+     * @return the newly created {@link Resource}
      */
-    Resource getOrCreate(String id, Owner owner);
+    Resource create(String id, Owner owner);
 
     /**
-     * Retrieves a {@link Resource} based on its ID or creates a new {@link Resource} if it doesn't exists.
+     * Creates a {@link Resource} based on its ID, with the current user as owner.
      *
      * @param id    the resource's ID
-     * @return the existing {@link Resource} or a new one if it doesn't exists yet.
+     * @return the newly created {@link Resource}
      */
-    Resource getOrCreate(String id);
+    Resource create(String id);
 
     /**
-     * Retrieves a {@link Resource} based on its ID or creates a new {@link Resource} if it doesn't exists.
+     * Removes a {@link Resource} based on its ID.
      *
-     * @param id        the resource's ID
-     * @param principal if the resource doesn't exists, a new one is created with the specified principal
-     * @return the existing {@link Resource} or a new one if it doesn't exists yet.
-     * @see ResourceService#getOrCreate(String, org.hawkular.accounts.api.model.Owner)
+     * @param id    the resource's ID
      */
-    Resource getOrCreate(String id, KeycloakPrincipal principal);
+    void delete(String id);
 }
