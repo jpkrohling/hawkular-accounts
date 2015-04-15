@@ -1,0 +1,22 @@
+{
+  "realm" : "master",
+  "users" : [ {
+    "id" : "2df45485-71a3-4df9-b20c-9d08ced28dad",
+    "username" : "admin",
+    "enabled" : false,
+    "totp" : false,
+    "emailVerified" : false,
+    "credentials" : [ {
+      "type" : "password",
+      "hashedSaltedValue" : "wVcoxFTTLTveSH/dPu+ut6EvuOeb4iSaIKcpMk5or6n0MlSUOI97DzZ7fOhb/ZsY9aJ3srSq5inEFC4UIJzfwQ==",
+      "salt" : "8BNmBmaKksbmc7PyOIaG/g==",
+      "hashIterations" : 1,
+      "temporary" : false
+    } ],
+    "requiredActions" : [ "UPDATE_PASSWORD" ],
+    "realmRoles" : [ "admin" ],
+    "applicationRoles" : {
+      "account" : [ "view-profile", "manage-account" ]
+    }
+  } ]
+}
