@@ -29,7 +29,7 @@
   <parent>
     <groupId>org.hawkular</groupId>
     <artifactId>hawkular-parent</artifactId>
-    <version>15</version>
+    <version>16-SNAPSHOT</version>
   </parent>
 
   <modules>
@@ -101,7 +101,7 @@
   </distributionManagement>
 
   <properties>
-    <version.org.keycloak>1.2.0.Final</version.org.keycloak>
+    <version.org.keycloak>1.3.0.Final-SNAPSHOT</version.org.keycloak>
     <failOnMissingWebXml>false</failOnMissingWebXml>
     <jboss.releases.repo.url>
       https://repository.jboss.org/nexus/service/local/staging/deploy/maven2/
@@ -115,12 +115,11 @@
     <dependencies>
       <dependency>
         <groupId>org.wildfly.bom</groupId>
-        <artifactId>jboss-javaee-7.0-with-all</artifactId>
+        <artifactId>jboss-javaee-7.0-wildfly</artifactId>
         <version>${version.org.wildfly}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
-
       <dependency>
         <groupId>org.wildfly</groupId>
         <artifactId>wildfly-spec-api</artifactId>
@@ -128,6 +127,14 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
+
+      <dependency>
+        <groupId>org.keycloak</groupId>
+        <artifactId>keycloak-server-feature-pack</artifactId>
+        <version>${version.org.keycloak}</version>
+        <type>zip</type>
+      </dependency>
+
       <dependency>
         <groupId>org.jboss.logging</groupId>
         <artifactId>jboss-logging</artifactId>
@@ -138,46 +145,6 @@
         <groupId>org.keycloak</groupId>
         <artifactId>keycloak-core</artifactId>
         <version>${version.org.keycloak}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.keycloak</groupId>
-        <artifactId>keycloak-war-dist-all</artifactId>
-        <version>${version.org.keycloak}</version>
-        <type>zip</type>
-        <exclusions>
-          <exclusion>
-            <groupId>org.keycloak</groupId>
-            <artifactId>keycloak-tomcat7-adapter-dist</artifactId>
-          </exclusion>
-          <exclusion>
-            <groupId>org.keycloak</groupId>
-            <artifactId>keycloak-example-themes-dist</artifactId>
-          </exclusion>
-          <exclusion>
-            <groupId>org.keycloak</groupId>
-            <artifactId>keycloak-eap6-adapter-dist</artifactId>
-          </exclusion>
-          <exclusion>
-            <groupId>org.keycloak</groupId>
-            <artifactId>keycloak-wildfly-adapter-dist</artifactId>
-          </exclusion>
-          <exclusion>
-            <groupId>org.keycloak</groupId>
-            <artifactId>keycloak-as7-adapter-dist</artifactId>
-          </exclusion>
-        </exclusions>
-      </dependency>
-      <dependency>
-        <groupId>org.keycloak</groupId>
-        <artifactId>keycloak-wildfly-adapter-dist</artifactId>
-        <version>${version.org.keycloak}</version>
-        <type>zip</type>
-        <exclusions>
-          <exclusion>
-            <groupId>org.keycloak</groupId>
-            <artifactId>keycloak-undertow-adapter</artifactId>
-          </exclusion>
-        </exclusions>
       </dependency>
       <dependency>
         <groupId>org.liquibase</groupId>

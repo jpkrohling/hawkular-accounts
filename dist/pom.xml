@@ -47,40 +47,46 @@
       <version>${project.version}</version>
       <type>jar</type>
     </dependency>
+
+    <dependency>
+      <groupId>org.keycloak</groupId>
+      <artifactId>keycloak-server-feature-pack</artifactId>
+      <version>${version.org.keycloak}</version>
+      <type>zip</type>
+    </dependency>
+
+    <dependency>
+      <groupId>org.keycloak</groupId>
+      <artifactId>keycloak-wf9-modules</artifactId>
+      <version>${version.org.keycloak}</version>
+      <type>zip</type>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
+
+      <!-- For preparing the base distribution with Keycloak -->
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
+        <groupId>org.wildfly.build</groupId>
+        <artifactId>wildfly-server-provisioning-maven-plugin</artifactId>
+        <version>1.1.0.Beta1</version>
         <executions>
           <execution>
-            <id>unpack</id>
-            <phase>prepare-package</phase>
+            <id>server-provisioning</id>
             <goals>
-              <goal>unpack</goal>
+              <goal>build</goal>
             </goals>
+            <phase>compile</phase>
             <configuration>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>org.wildfly</groupId>
-                  <artifactId>wildfly-dist</artifactId>
-                  <type>zip</type>
-                  <version>${version.org.wildfly}</version>
-                  <outputDirectory>${project.build.directory}/unpacked</outputDirectory>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.keycloak</groupId>
-                  <artifactId>keycloak-server-overlay</artifactId>
-                  <type>zip</type>
-                  <version>${version.org.keycloak}</version>
-                  <outputDirectory>${project.build.directory}/keycloak</outputDirectory>
-                </artifactItem>
-              </artifactItems>
+              <server-name>wildfly</server-name>
+              <buildName>${project.build.directory}/unpacked</buildName>
+              <config-file>server-provisioning.xml</config-file>
             </configuration>
           </execution>
         </executions>
       </plugin>
+
+      <!-- Our adaptations to the standalone.xml -->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>xml-maven-plugin</artifactId>
@@ -95,12 +101,12 @@
             <configuration>
               <transformationSets>
                 <transformationSet>
-                  <dir>${project.build.directory}/unpacked/wildfly-${version.org.wildfly}/standalone/configuration</dir>
+                  <dir>${project.build.directory}/unpacked/wildfly/standalone/configuration</dir>
                   <stylesheet>src/main/xslt/standalone.xsl</stylesheet>
                   <includes>
                     <include>standalone*.xml</include>
                   </includes>
-                  <outputDir>${project.build.directory}/unpacked/wildfly-${version.org.wildfly}/standalone/configuration</outputDir>
+                  <outputDir>${project.build.directory}/unpacked/wildfly/standalone/configuration</outputDir>
                   <parameters>
                     <parameter>
                       <name>uuid.hawkular.accounts.backend</name>
@@ -113,6 +119,8 @@
           </execution>
         </executions>
       </plugin>
+
+      <!-- Putting everything on a single bundle -->
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
         <executions>
@@ -131,6 +139,35 @@
           </execution>
         </executions>
       </plugin>
+
+      <!-- Keycloak adapter modules -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>unpack</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>org.keycloak</groupId>
+                  <artifactId>keycloak-wf9-modules</artifactId>
+                  <type>zip</type>
+                  <outputDirectory>
+                    ${project.build.directory}/unpacked/wildfly/modules/system/layers/base/
+                  </outputDirectory>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Generate the UUIDs used as secret on the Hawkular Realm configuration -->
       <plugin>
         <groupId>org.codehaus.gmaven</groupId>
         <artifactId>gmaven-plugin</artifactId>

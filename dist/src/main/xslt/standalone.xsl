@@ -40,7 +40,8 @@
   <xsl:template match="node()[name(.)='extensions']">
     <xsl:copy>
       <xsl:apply-templates select="node()|@*"/>
-      <extension module="org.keycloak.keycloak-subsystem"/>
+      <extension module="org.keycloak.keycloak-adapter-subsystem"/>
+      <extension module="org.jboss.as.deployment-scanner"/>
     </xsl:copy>
     <xsl:call-template name="system-properties"/>
   </xsl:template>
@@ -49,14 +50,6 @@
   <xsl:template match="node()[name(.)='datasources']">
     <xsl:copy>
       <xsl:apply-templates select="node()[name(.)='datasource']"/>
-      <datasource jndi-name="java:jboss/datasources/KeycloakDS" pool-name="KeycloakDS" enabled="true" use-java-context="true">
-        <connection-url>jdbc:h2:${jboss.server.data.dir}${/}h2${/}keycloak;AUTO_SERVER=TRUE</connection-url>
-        <driver>h2</driver>
-        <security>
-          <user-name>sa</user-name>
-          <password>sa</password>
-        </security>
-      </datasource>
       <datasource jndi-name="java:jboss/datasources/HawkularDS" pool-name="HawkularDS" enabled="true" use-java-context="true">
         <connection-url>jdbc:h2:${jboss.server.data.dir}${/}h2${/}hawkular;AUTO_SERVER=TRUE</connection-url>
         <driver>h2</driver>
@@ -82,14 +75,14 @@
   <xsl:template match="node()[name(.)='profile']">
     <xsl:copy>
       <xsl:apply-templates select="node()|@*"/>
-      <subsystem xmlns="urn:jboss:domain:keycloak:1.0">
-        <auth-server name="main-auth-server">
-          <enabled>true</enabled>
-          <web-context>auth</web-context>
-        </auth-server>
+      <subsystem xmlns="urn:jboss:domain:deployment-scanner:2.0">
+        <deployment-scanner path="deployments" relative-to="jboss.server.base.dir" scan-interval="5000"
+                            runtime-failure-causes-rollback="false"/>
+      </subsystem>
+      <subsystem xmlns="urn:jboss:domain:keycloak:1.1">
         <realm name="hawkular">
           <auth-server-url>/auth</auth-server-url>
-          <auth-server-url-for-backend-requests><xsl:text disable-output-escaping="yes">http://${jboss.bind.address:127.0.0.1}:${jboss.http.port:8080}/auth</xsl:text></auth-server-url-for-backend-requests>
+          <auth-server-url-for-backend-requests>http://&#36;{jboss.bind.address:127.0.0.1}:&#36;{jboss.http.port:8080}/auth</auth-server-url-for-backend-requests>
           <ssl-required>none</ssl-required>
         </realm>
         <secure-deployment name="hawkular-accounts.war">
