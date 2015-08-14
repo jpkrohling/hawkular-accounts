@@ -19,12 +19,14 @@ package org.hawkular.accounts.sample.websocket.backend;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.inject.Inject;
 import javax.websocket.CloseReason;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
+
 import org.hawkular.accounts.api.PersonaService;
 import org.hawkular.accounts.api.model.HawkularUser;
 import org.hawkular.accounts.api.model.Persona;
