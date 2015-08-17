@@ -35,7 +35,7 @@ websocket.onopen = function(event) {
             messageBox.innerHTML += "<li>" + event.data + "</li>";
         };
     };
-    websocket.send("Login: " + keycloak.token);
+    websocket.send(JSON.stringify({"authentication": {"token": keycloak.token}}));
 };
 
 websocket.onerror = function(event) {
@@ -44,5 +44,5 @@ websocket.onerror = function(event) {
 };
 
 function sendEchoMessage() {
-    websocket.send("echo");
+    websocket.send(JSON.stringify({"message": "echo", "authentication": {"token": keycloak.token}}));
 }

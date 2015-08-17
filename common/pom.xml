@@ -17,8 +17,7 @@
     limitations under the License.
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
@@ -27,51 +26,29 @@
     <version>1.0.11.Final-SNAPSHOT</version>
   </parent>
 
-  <name>Hawkular - Accounts - Web Sockets Sample - Backend</name>
-  <artifactId>hawkular-accounts-sample-websocket-backend</artifactId>
-  <packaging>war</packaging>
+  <name>Hawkular - Accounts - API</name>
+  <artifactId>hawkular-accounts-common</artifactId>
+  <packaging>jar</packaging>
 
   <description>
-    Sample WebSockets application - Frontend
+    Useful code for Accounts in general.
   </description>
 
   <dependencies>
     <dependency>
-      <groupId>org.hawkular.accounts</groupId>
-      <artifactId>hawkular-accounts-websocket-api</artifactId>
-      <version>1.0.11.Final-SNAPSHOT</version>
+      <groupId>org.jboss.spec.javax.servlet</groupId>
+      <artifactId>jboss-servlet-api_3.1_spec</artifactId>
+      <scope>provided</scope>
     </dependency>
-
     <dependency>
-      <groupId>org.jboss.spec.javax.websocket</groupId>
-      <artifactId>jboss-websocket-api_1.1_spec</artifactId>
+      <groupId>org.jboss.spec.javax.json</groupId>
+      <artifactId>jboss-json-api_1.0_spec</artifactId>
     </dependency>
-
     <dependency>
       <groupId>javax.enterprise</groupId>
       <artifactId>cdi-api</artifactId>
       <scope>provided</scope>
     </dependency>
-
-    <dependency>
-      <groupId>org.jboss.spec.javax.json</groupId>
-      <artifactId>jboss-json-api_1.0_spec</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>io.undertow</groupId>
-      <artifactId>undertow-core</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.undertow</groupId>
-      <artifactId>undertow-websockets-jsr</artifactId>
-      <scope>provided</scope>
-    </dependency>
   </dependencies>
-
-  <build>
-    <finalName>${artifactId}</finalName>
-  </build>
 </project>
 

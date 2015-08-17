@@ -17,8 +17,7 @@
     limitations under the License.
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
@@ -27,18 +26,24 @@
     <version>1.0.11.Final-SNAPSHOT</version>
   </parent>
 
-  <name>Hawkular - Accounts - Web Sockets Sample - Backend</name>
-  <artifactId>hawkular-accounts-sample-websocket-backend</artifactId>
-  <packaging>war</packaging>
+  <name>Hawkular - Accounts - WebSocket API</name>
+  <artifactId>hawkular-accounts-websocket-api</artifactId>
+  <packaging>jar</packaging>
 
   <description>
-    Sample WebSockets application - Frontend
+    Authentication API for WebSocket endpoints.
   </description>
 
   <dependencies>
     <dependency>
       <groupId>org.hawkular.accounts</groupId>
-      <artifactId>hawkular-accounts-websocket-api</artifactId>
+      <artifactId>hawkular-accounts-api</artifactId>
+      <version>1.0.11.Final-SNAPSHOT</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.hawkular.accounts</groupId>
+      <artifactId>hawkular-accounts-common</artifactId>
       <version>1.0.11.Final-SNAPSHOT</version>
     </dependency>
 
@@ -59,10 +64,11 @@
     </dependency>
 
     <dependency>
-      <groupId>io.undertow</groupId>
-      <artifactId>undertow-core</artifactId>
+      <groupId>org.jboss.spec.javax.servlet</groupId>
+      <artifactId>jboss-servlet-api_3.1_spec</artifactId>
       <scope>provided</scope>
     </dependency>
+
     <dependency>
       <groupId>io.undertow</groupId>
       <artifactId>undertow-websockets-jsr</artifactId>
@@ -70,8 +76,5 @@
     </dependency>
   </dependencies>
 
-  <build>
-    <finalName>${artifactId}</finalName>
-  </build>
 </project>
 

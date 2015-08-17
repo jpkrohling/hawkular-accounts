@@ -17,52 +17,45 @@
 package org.hawkular.accounts.sample.websocket.backend;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.inject.Inject;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
 import javax.websocket.CloseReason;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
-import org.hawkular.accounts.api.PersonaService;
-import org.hawkular.accounts.api.model.HawkularUser;
-import org.hawkular.accounts.api.model.Persona;
+import org.hawkular.accounts.websocket.Authenticator;
+import org.hawkular.accounts.websocket.WebsocketAuthenticationException;
+import org.hawkular.accounts.websocket.internal.CachedSession;
 
-@ServerEndpoint("/socket")
+@ServerEndpoint(value = "/socket")
 public class Socket {
-    Map<String, Persona> cachedSessions = new HashMap<>();
+    Map<String, CachedSession> cachedSessions = new HashMap<>();
 
     @Inject
-    PersonaService personaService;
+    Authenticator authenticator;
 
     @OnMessage
     public String onMessage(String message, Session session) throws IOException {
-        if (message.toLowerCase().startsWith("login:")) {
-            doLogin(message, session);
-        }
-        return message;
+        authenticate(message, session);
+        JsonReader jsonReader = Json.createReader(new StringReader(message));
+        JsonObject jsonMessage = jsonReader.readObject();
+        return jsonMessage.getString("message");
     }
 
-    private void doLogin(String message, Session session) throws IOException {
-        HawkularUser user = null;
-        String[] parts = message.split(":");
-
-        if (parts.length != 2) {
-            // should not happen, as it's checked already on the onMessage
-            session.close(new CloseReason(CloseReason.CloseCodes.CANNOT_ACCEPT, "Please, login first."));
+    private void authenticate(String message, Session session) throws IOException {
+        try {
+            authenticator.authenticate(message, session);
+        } catch (WebsocketAuthenticationException e) {
+            session.close(new CloseReason(CloseReason.CloseCodes.CLOSED_ABNORMALLY, e.getLocalizedMessage()));
         }
-
-//        String tokenPart = parts[1].trim();
-//
-//        if (user != null) {
-//            cachedSessions.put(session.getId(), new HawkularUser("abc"));
-//            return "Continue";
-//        } else {
-//            session.close(new CloseReason(CloseReason.CloseCodes.CANNOT_ACCEPT, "Login failed."));
-//        }
     }
 
     @OnOpen
