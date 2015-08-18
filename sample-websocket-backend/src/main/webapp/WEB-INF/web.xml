@@ -23,10 +23,14 @@
          version="3.0">
   <display-name>Hawkular Accounts - WebSocket Backend Sample</display-name>
 
+  <listener>
+    <listener-class>org.hawkular.accounts.common.ServletContextEnhancer</listener-class>
+  </listener>
+
   <security-constraint>
     <web-resource-collection>
-      <web-resource-name>All endpoints</web-resource-name>
-      <url-pattern>/*</url-pattern>
+      <web-resource-name>No endpoints</web-resource-name>
+      <url-pattern>/none/*</url-pattern>
     </web-resource-collection>
     <auth-constraint>
       <role-name>*</role-name>

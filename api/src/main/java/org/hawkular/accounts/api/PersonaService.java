@@ -18,6 +18,7 @@ package org.hawkular.accounts.api;
 
 import java.util.Set;
 
+import org.hawkular.accounts.api.model.HawkularUser;
 import org.hawkular.accounts.api.model.Persona;
 import org.hawkular.accounts.api.model.Resource;
 import org.hawkular.accounts.api.model.Role;
@@ -68,4 +69,6 @@ public interface PersonaService {
      * @return the current persona.
      */
     Persona getCurrent();
+
+    boolean isAllowedToImpersonate(HawkularUser actual, Persona toImpersonate);
 }

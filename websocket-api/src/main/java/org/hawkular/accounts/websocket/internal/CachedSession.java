@@ -24,10 +24,24 @@ import org.hawkular.accounts.api.model.Persona;
 public class CachedSession {
     private final String token;
     private final Persona persona;
+    private long expiresAt;
 
-    public CachedSession(String token, Persona persona) {
+    public CachedSession(String token, Persona persona, long expiresAt) {
+        if (null == persona) {
+            throw new IllegalStateException("Persona cannot be null for a session");
+        }
+
+        if (null == token) {
+            throw new IllegalStateException("Token cannot be null for a session");
+        }
+
+        if (expiresAt <= 0) {
+            throw new IllegalStateException("Invalid expiration date/time for session");
+        }
+
         this.token = token;
         this.persona = persona;
+        this.expiresAt = expiresAt;
     }
 
     public String getToken() {
@@ -36,5 +50,9 @@ public class CachedSession {
 
     public Persona getPersona() {
         return persona;
+    }
+
+    public long getExpiresAt() {
+        return expiresAt;
     }
 }

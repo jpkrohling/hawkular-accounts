@@ -43,8 +43,15 @@
     </dependency>
 
     <dependency>
+      <groupId>org.hawkular.accounts</groupId>
+      <artifactId>hawkular-accounts-common</artifactId>
+      <version>1.0.11.Final-SNAPSHOT</version>
+    </dependency>
+
+    <dependency>
       <groupId>org.jboss.spec.javax.websocket</groupId>
       <artifactId>jboss-websocket-api_1.1_spec</artifactId>
+      <scope>provided</scope>
     </dependency>
 
     <dependency>
@@ -56,6 +63,7 @@
     <dependency>
       <groupId>org.jboss.spec.javax.json</groupId>
       <artifactId>jboss-json-api_1.0_spec</artifactId>
+      <scope>provided</scope>
     </dependency>
 
     <dependency>
@@ -71,7 +79,7 @@
   </dependencies>
 
   <build>
-    <finalName>${artifactId}</finalName>
+    <finalName>${project.artifactId}</finalName>
   </build>
 </project>
 

@@ -14,16 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-var keycloak = Keycloak();
-keycloak.init({ onLoad: 'login-required' })
-    .success(function(authenticated) {
-        if (authenticated) {
-            console.debug("User is now logged in");
-            document.getElementById("usersName").innerHTML = keycloak.tokenParsed.name + "("+ keycloak.subject +")";
-        } else {
-            console.debug("User is NOT authenticated");
-        }
-    })
-    .error(function() {
-        alert('Something wrong happened during the auth');
-    });
+package org.hawkular.accounts.common;
+
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.PARAMETER;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
+import javax.inject.Qualifier;
+
+/**
+ * @author Juraci Paixão Kröhling
+ */
+@Qualifier
+@Retention(RUNTIME)
+@Target({FIELD, PARAMETER, METHOD})
+public @interface RealmResourceSecret {
+}

@@ -25,7 +25,7 @@ var messageBox = document.getElementById("messageBox");
 var errorBox = document.getElementById("errorBox");
 
 websocket.onopen = function(event) {
-    messageBox.innerHTML = "<li>Opened connection to "+wsUri+". Trying to authenticate as the logged in user</li>";
+    messageBox.innerHTML = "<li>Opened connection to "+wsUri+".</li>";
     var loginSuccessful = false;
     websocket.onmessage = function(event) {
         console.log("Response from the token login: " + event.data);
@@ -35,7 +35,10 @@ websocket.onopen = function(event) {
             messageBox.innerHTML += "<li>" + event.data + "</li>";
         };
     };
-    websocket.send(JSON.stringify({"authentication": {"token": keycloak.token}}));
+};
+
+websocket.onclose = function(event) {
+    messageBox.innerHTML += "<li>Socket closed: " + event.code + " - " + event.reason + "</li>";
 };
 
 websocket.onerror = function(event) {
@@ -44,5 +47,11 @@ websocket.onerror = function(event) {
 };
 
 function sendEchoMessage() {
-    websocket.send(JSON.stringify({"message": "echo", "authentication": {"token": keycloak.token}}));
+    websocket.send(JSON.stringify({
+        "message": "Hello World!",
+        "authentication": {
+            "token": keycloak.token,
+            "persona": keycloak.subject
+        }
+    }));
 }

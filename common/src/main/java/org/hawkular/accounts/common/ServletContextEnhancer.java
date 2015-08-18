@@ -14,16 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-var keycloak = Keycloak();
-keycloak.init({ onLoad: 'login-required' })
-    .success(function(authenticated) {
-        if (authenticated) {
-            console.debug("User is now logged in");
-            document.getElementById("usersName").innerHTML = keycloak.tokenParsed.name + "("+ keycloak.subject +")";
-        } else {
-            console.debug("User is NOT authenticated");
-        }
-    })
-    .error(function() {
-        alert('Something wrong happened during the auth');
-    });
+package org.hawkular.accounts.common;
+
+import javax.inject.Inject;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+
+/**
+ * @author Juraci Paixão Kröhling
+ */
+public class ServletContextEnhancer implements ServletContextListener {
+    @Inject
+    ApplicationResources applicationResources;
+
+    @Override public void contextInitialized(ServletContextEvent servletContextEvent) {
+        applicationResources.setServletContext(servletContextEvent.getServletContext());
+    }
+
+    @Override public void contextDestroyed(ServletContextEvent servletContextEvent) {
+    }
+
+}
