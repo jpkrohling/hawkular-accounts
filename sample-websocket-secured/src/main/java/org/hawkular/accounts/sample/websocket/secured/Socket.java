@@ -14,41 +14,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hawkular.accounts.sample.websocket.backend;
+package org.hawkular.accounts.sample.websocket.secured;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.security.Principal;
 
-import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
-import javax.websocket.CloseReason;
 import javax.websocket.OnMessage;
+import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
-import org.hawkular.accounts.websocket.Authenticator;
-import org.hawkular.accounts.websocket.WebsocketAuthenticationException;
-
+/**
+ * @author Juraci Paixão Kröhling
+ */
 @ServerEndpoint(value = "/socket")
 public class Socket {
-    @Inject
-    Authenticator authenticator;
-
     @OnMessage
     public String onMessage(String message, Session session) throws IOException {
-        authenticate(message, session);
+        Principal principal = session.getUserPrincipal();
         JsonReader jsonReader = Json.createReader(new StringReader(message));
         JsonObject jsonMessage = jsonReader.readObject();
-        return jsonMessage.getString("message");
+        return "User " + principal.getName() + " says: " + jsonMessage.getString("message");
     }
 
-    private void authenticate(String message, Session session) throws IOException {
-        try {
-            authenticator.authenticate(message, session);
-        } catch (WebsocketAuthenticationException e) {
-            session.close(new CloseReason(CloseReason.CloseCodes.CLOSED_ABNORMALLY, e.getLocalizedMessage()));
-        }
+    @OnOpen
+    public String onOpen() {
+        return "";
     }
+
 }

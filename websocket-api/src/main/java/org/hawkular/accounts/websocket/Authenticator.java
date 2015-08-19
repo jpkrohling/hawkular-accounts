@@ -37,6 +37,18 @@ import org.hawkular.accounts.common.UsernamePasswordConverter;
 import org.hawkular.accounts.websocket.internal.CachedSession;
 
 /**
+ * Helper integration for Server Web Socket Endpoints. Each message coming to a Web Socket should be passed to this
+ * authenticator first. If authentication data can be derived for the connection or from the message, processing
+ * continues. Otherwise, the exception {@link WebsocketAuthenticationException} is thrown.
+ * <p>
+ * This authenticator includes a simplistic cache for sessions, so that if a session and message fulfills the
+ * following conditions, the message is accepted and the session is understood as sufficiently authenticated:
+ * <ul>
+ * <li>The current message has no authentication data, but a previous one did have valid auth data</li>
+ * <li>The current message has no persona in the authentication, or is the same as the original persona.</li>
+ * <li>The expiration timestamp for the original token has not elapsed yet.</li>
+ * </ul>
+ *
  * @author Juraci Paixão Kröhling
  */
 @ApplicationScoped
@@ -54,8 +66,27 @@ public class Authenticator {
     @Inject
     UserService userService;
 
+    /**
+     * Minimalistic cache for sessions.
+     * TODO: convert this into a proper Cache.
+     */
     private Map<String, CachedSession> cachedSessions = new HashMap<>();
 
+    /**
+     * Authenticates the user/persona that sent the message based on either the message itself or based on previous
+     * messages (looked up via the session ID).
+     * <p>
+     * Sample messages:<br/>
+     * With token - {"authentication": {"token": "abc123def"}, "mypayload": {"message":"hello world"}}<br/>
+     * User/pass - {"authentication":
+     * {"login": {"username": "jdoe", "password":"securepass"}}, "mypayload":{"message":"hello world"}}<br/>
+     *
+     * @param message    JSON message with an {@code authentication} object, which should include either a {@code token}
+     *                   object or {@code username} and {@code password}.
+     * @param session    the Web Socket session for this message.
+     * @throws WebsocketAuthenticationException if authentication cannot be inferred from the message nor from the
+     * session.
+     */
     public void authenticate(String message, Session session) throws WebsocketAuthenticationException {
         try (JsonReader jsonReader = Json.createReader(new StringReader(message))) {
             JsonObject jsonMessage = jsonReader.readObject();
@@ -83,7 +114,7 @@ public class Authenticator {
 
             // cached session is valid!
             if (null != cachedSession) {
-                this.cachedSessions.put(session.getId(), cachedSession);
+                this.cachedSessions.putIfAbsent(session.getId(), cachedSession);
             } else {
                 // not that I'm trying to be rude, but...
                 throw new WebsocketAuthenticationException("No authentication data provided.");

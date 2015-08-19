@@ -224,6 +224,7 @@
       <id>sample</id>
       <modules>
         <module>sample</module>
+        <module>sample-websocket-secured</module>
         <module>sample-websocket-backend</module>
         <module>sample-websocket-frontend</module>
       </modules>
