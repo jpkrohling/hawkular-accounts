@@ -83,6 +83,9 @@
       <local-cache name="role-cache"/>
       <local-cache name="operation-cache"/>
     </cache-container>
+    <cache-container name="hawkular-accounts-websocket" default-cache="session-cache">
+      <local-cache name="session-cache"/>
+    </cache-container>
   </xsl:template>
 
   <!-- Add MDB support for Hawkular Accounts -->

@@ -41,7 +41,7 @@ import org.hawkular.accounts.websocket.internal.CachedSession;
  * authenticator first. If authentication data can be derived for the connection or from the message, processing
  * continues. Otherwise, the exception {@link WebsocketAuthenticationException} is thrown.
  * <p>
- * This authenticator includes a simplistic cache for sessions, so that if a session and message fulfills the
+ * This authenticator includes a cache for sessions, so that if a session and message fulfills the
  * following conditions, the message is accepted and the session is understood as sufficiently authenticated:
  * <ul>
  * <li>The current message has no authentication data, but a previous one did have valid auth data</li>
