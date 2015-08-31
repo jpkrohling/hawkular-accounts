@@ -46,7 +46,7 @@ public class Socket {
 
     private void authenticate(String message, Session session) throws IOException {
         try {
-            authenticator.authenticate(message, session);
+            authenticator.authenticateWithMessage(message, session);
         } catch (WebsocketAuthenticationException e) {
             session.close(new CloseReason(CloseReason.CloseCodes.CLOSED_ABNORMALLY, e.getLocalizedMessage()));
         }

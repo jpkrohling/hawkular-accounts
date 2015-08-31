@@ -16,6 +16,9 @@
  */
 package org.hawkular.accounts.websocket;
 
+import static org.hawkular.accounts.websocket.internal.AuthenticationMode.MESSAGE;
+import static org.hawkular.accounts.websocket.internal.AuthenticationMode.TOKEN;
+
 import java.io.StringReader;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,8 +35,8 @@ import org.hawkular.accounts.api.UserService;
 import org.hawkular.accounts.api.model.HawkularUser;
 import org.hawkular.accounts.api.model.Persona;
 import org.hawkular.accounts.common.TokenVerifier;
-import org.hawkular.accounts.common.UsernamePasswordConversionException;
 import org.hawkular.accounts.common.UsernamePasswordConverter;
+import org.hawkular.accounts.websocket.internal.AuthenticationMode;
 import org.hawkular.accounts.websocket.internal.CachedSession;
 
 /**
@@ -87,62 +90,114 @@ public class Authenticator {
      * @throws WebsocketAuthenticationException if authentication cannot be inferred from the message nor from the
      * session.
      */
-    public void authenticate(String message, Session session) throws WebsocketAuthenticationException {
+    public void authenticateWithMessage(String message, Session session) throws WebsocketAuthenticationException {
         try (JsonReader jsonReader = Json.createReader(new StringReader(message))) {
             JsonObject jsonMessage = jsonReader.readObject();
             JsonObject jsonAuth = jsonMessage.getJsonObject("authentication");
-
-            // do we have this session on the cache?
-            CachedSession cachedSession = cachedSessions.get(session.getId());
-
-            if (null == jsonAuth && cachedSession != null) {
-                // no "authentication" node in JSON, but the session has been previously authenticated, so, it's all ok
-                return;
+            String personaId = null;
+            if (jsonAuth != null) {
+                personaId = jsonAuth.getString("persona");
             }
 
-            // if we don't have a session already or if it's not valid anymore, we get a new session based
-            // on the contents of the message
-            if (null == cachedSession || !isValid(cachedSession, jsonAuth)) {
-                try {
-                    cachedSession = authenticateWithMessage(jsonAuth);
-                } catch (UsernamePasswordConversionException e) {
-                    throw new WebsocketAuthenticationException(e);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            }
-
-            // cached session is valid!
-            if (null != cachedSession) {
-                this.cachedSessions.putIfAbsent(session.getId(), cachedSession);
-            } else {
-                // not that I'm trying to be rude, but...
-                throw new WebsocketAuthenticationException("No authentication data provided.");
-            }
+            authenticate(MESSAGE, personaId, session, jsonAuth, null, null, null);
         }
     }
 
-    private CachedSession authenticateWithMessage(JsonObject jsonAuth) throws Exception {
-        String personaId = jsonAuth.getString("persona");
+    /**
+     * Authenticates the user/persona that sent the message based on the token or based on previous messages (looked
+     * up via the session ID).
+     * @param token      the bearer token to be validated
+     * @param session    the Web Socket session
+     * @throws WebsocketAuthenticationException if authentication cannot be inferred from the token nor from the
+     * session.
+     */
+    public void authenticateWithToken(String token, String personaId, Session session)
+            throws WebsocketAuthenticationException {
+        authenticate(TOKEN, personaId, session, null, token, null, null);
+    }
 
-        // now, we have either a "token" or a "login" object
-        String authToken = jsonAuth.getString("token");
-        if (null != authToken) {
-            return authenticateWithToken(authToken, personaId);
+    /**
+     * Authenticates the user/persona that sent the message based on the credentials or based on previous messages
+     * (looked up via the session ID).
+     * @param username   the username
+     * @param password   the password
+     * @param session    the Web Socket session
+     * @throws WebsocketAuthenticationException if authentication cannot be inferred from the credentials nor from the
+     * session.
+     */
+    public void authenticateWithCredentials(String username, String password, String personaId, Session session)
+            throws WebsocketAuthenticationException {
+        authenticate(TOKEN, personaId, session, null, null, username, password);
+    }
+
+    private void authenticate(
+            AuthenticationMode mode,
+            String personaId,
+            Session session,
+            JsonObject jsonAuth,
+            String token,
+            String username,
+            String password
+    ) throws WebsocketAuthenticationException {
+        // do we have this session on the cache?
+        CachedSession cachedSession = cachedSessions.get(session.getId());
+
+        if (isValid(cachedSession, personaId)) {
+            // the session is still valid, so, just return
+            return;
         }
 
+        if (null == cachedSession || !isValid(cachedSession, personaId)) {
+            try {
+                switch (mode) {
+                    case CREDENTIALS:
+                        cachedSession = doAuthenticationWithToken(personaId, token);
+                        break;
+                    case MESSAGE:
+                        cachedSession = doAuthenticationWithMessage(personaId, jsonAuth);
+                        break;
+                    case TOKEN:
+                        cachedSession = doAuthenticationWithCredentials(personaId, username, password);
+                        break;
+                    default:
+                        throw new WebsocketAuthenticationException("Could not determine the authentication mode " +
+                                "(token, message, credentials).");
+                }
+            } catch (WebsocketAuthenticationException e) {
+                throw e;
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        // cached session is valid!
+        if (null != cachedSession) {
+            this.cachedSessions.putIfAbsent(session.getId(), cachedSession);
+        } else {
+            // not that I'm trying to be rude, but...
+            throw new WebsocketAuthenticationException("No authentication data provided.");
+        }
+    }
+
+    private CachedSession doAuthenticationWithMessage(String personaId, JsonObject jsonAuth) throws Exception {
         // now, we have either a "token" or a "login" object
+        if (jsonAuth.containsKey("token")) {
+            String authToken = jsonAuth.getString("token");
+            return doAuthenticationWithToken(personaId, authToken);
+        }
+
+        // the only other possible option is credentials, so...
         JsonObject jsonLogin = jsonAuth.getJsonObject("login");
         if (null != jsonLogin) {
             String username = jsonLogin.getString("username");
             String password = jsonLogin.getString("password");
-            return authenticateWithUsernamePassword(username, password, personaId);
+            return doAuthenticationWithCredentials(personaId, username, password);
         }
 
         return null;
     }
 
-    private CachedSession authenticateWithUsernamePassword(String username, String password, String personaId) throws
+    private CachedSession doAuthenticationWithCredentials(String personaId, String username, String password) throws
             Exception {
         if (null == username || username.isEmpty()) {
             return null;
@@ -152,10 +207,11 @@ public class Authenticator {
             return null;
         }
 
-        throw new UnsupportedOperationException("Not implemented yet.");
+        String token = usernamePasswordConverter.getAccessToken(username, password);
+        return doAuthenticationWithToken(personaId, token);
     }
 
-    private CachedSession authenticateWithToken(String authToken, String personaId) throws Exception {
+    private CachedSession doAuthenticationWithToken(String personaId, String authToken) throws Exception {
         if (null == authToken) {
             return null;
         }
@@ -163,6 +219,15 @@ public class Authenticator {
         String accessToken = tokenVerifier.verify(authToken);
         JsonReader jsonReader = Json.createReader(new StringReader(accessToken));
         JsonObject accessTokenJson = jsonReader.readObject();
+
+        if (accessToken.contains("error_description")) {
+            String errorDescription = accessTokenJson.getString("error_description");
+            String error = accessTokenJson.getString("error");
+            throw new WebsocketAuthenticationException(
+                    "Authentication server returned an error. Error: " + error +
+                            ". Error description: " + errorDescription
+            );
+        }
 
         String userId = accessTokenJson.getString("sub");
 
@@ -195,8 +260,12 @@ public class Authenticator {
         return new CachedSession(accessToken, persona, expirationTime);
     }
 
-    private boolean isValid(CachedSession cachedSession, JsonObject jsonAuth) {
-        if (!cachedSession.getPersona().getId().equals(jsonAuth.getString("persona"))) {
+    private boolean isValid(CachedSession cachedSession, String personaId) {
+        if (null == cachedSession) {
+            return false;
+        }
+
+        if (!cachedSession.getPersona().getId().equals(personaId)) {
             // session is for a different persona, force a new authentication
             return false;
         }

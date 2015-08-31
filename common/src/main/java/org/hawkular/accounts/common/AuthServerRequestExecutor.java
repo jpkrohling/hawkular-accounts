@@ -55,10 +55,14 @@ public class AuthServerRequestExecutor {
             Exception {
 
         HttpURLConnection connection;
+        String credentials = clientId + ":" + secret;
+        String authorizationHeader = "Basic " + Base64.getEncoder().encodeToString(credentials.getBytes());
+
         if ("POST".equalsIgnoreCase(method)) {
             connection =  (HttpURLConnection) new URL(url).openConnection();
             connection.setRequestMethod(method);
             connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+            connection.setRequestProperty("Authorization", authorizationHeader);
             connection.setDoInput(true);
             connection.setDoOutput(true);
 
@@ -70,14 +74,11 @@ public class AuthServerRequestExecutor {
         } else {
             connection =  (HttpURLConnection) new URL(url + "?" + urlParameters).openConnection();
             connection.setRequestMethod(method);
+            connection.setRequestProperty("Authorization", authorizationHeader);
         }
 
         connection.setConnectTimeout(5000);
         connection.setReadTimeout(5000);
-
-        String credentials = clientId + ":" + secret;
-        String authorizationHeader = "Basic " + Base64.getEncoder().encodeToString(credentials.getBytes());
-        connection.setRequestProperty("Authorization", authorizationHeader);
 
         StringBuilder response = new StringBuilder();
 

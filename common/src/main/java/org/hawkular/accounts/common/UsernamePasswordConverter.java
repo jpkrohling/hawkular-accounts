@@ -42,11 +42,13 @@ public class UsernamePasswordConverter {
     AuthServerRequestExecutor executor;
 
     public String getAccessToken(String username, String password) throws Exception {
-        return getResponse(username, password).getString("token");
+        JsonObject response = getResponse(username, password);
+        return response.getString("access_token");
     }
 
     public String getRefreshToken(String username, String password) throws Exception {
-        return getResponse(username, password).getString("refresh_token");
+        JsonObject response = getResponse(username, password);
+        return response.getString("refresh_token");
     }
 
     private JsonObject getResponse(String username, String password) throws Exception {

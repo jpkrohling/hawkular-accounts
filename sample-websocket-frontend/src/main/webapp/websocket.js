@@ -47,10 +47,21 @@ websocket.onerror = function(event) {
 };
 
 function sendEchoMessage() {
+    //websocket.send(JSON.stringify({
+    //    "message": "Hello World!",
+    //    "authentication": {
+    //        "token": keycloak.token,
+    //        "persona": keycloak.subject
+    //    }
+    //}));
+
     websocket.send(JSON.stringify({
         "message": "Hello World!",
         "authentication": {
-            "token": keycloak.token,
+            "login": {
+                "username": "jdoe",
+                "password": "password"
+            },
             "persona": keycloak.subject
         }
     }));
