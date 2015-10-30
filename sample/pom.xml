@@ -39,6 +39,7 @@
       <groupId>org.hawkular.accounts</groupId>
       <artifactId>hawkular-accounts-api</artifactId>
       <version>1.1.0.Final-SNAPSHOT</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.hawkular.accounts</groupId>
@@ -126,7 +127,7 @@
         <configuration>
           <archive>
             <manifestEntries>
-              <Dependencies>org.infinispan export,com.datastax.cassandra</Dependencies>
+              <Dependencies>org.infinispan export,com.datastax.cassandra,org.hawkular.accounts.api</Dependencies>
             </manifestEntries>
           </archive>
         </configuration>

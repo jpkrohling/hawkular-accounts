@@ -37,6 +37,13 @@
   <dependencies>
     <dependency>
       <groupId>org.hawkular.accounts</groupId>
+      <artifactId>hawkular-accounts-api-wf-module</artifactId>
+      <version>1.1.0.Final-SNAPSHOT</version>
+      <classifier>module</classifier>
+      <type>zip</type>
+    </dependency>
+    <dependency>
+      <groupId>org.hawkular.accounts</groupId>
       <artifactId>hawkular-accounts</artifactId>
       <version>1.1.0.Final-SNAPSHOT</version>
       <type>war</type>

@@ -106,6 +106,16 @@
       <fileMode>0644</fileMode>
       <directoryMode>0755</directoryMode>
     </dependencySet>
+    <!-- Accounts API module -->
+    <dependencySet>
+      <outputDirectory>/modules</outputDirectory>
+      <includes>
+        <include>org.hawkular.accounts:hawkular-accounts-api-wf-module:zip:module</include>
+      </includes>
+      <unpack>true</unpack>
+      <fileMode>0644</fileMode>
+      <directoryMode>0755</directoryMode>
+    </dependencySet>
     <!-- Cassandra Driver dependencies -->
     <dependencySet>
       <outputDirectory>/modules/com/datastax/cassandra/main</outputDirectory>

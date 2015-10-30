@@ -36,6 +36,7 @@
     <module>common</module>
     <module>accounts</module>
     <module>api</module>
+    <module>api-wf-module</module>
     <module>websocket-api</module>
     <module>events-backend</module>
     <module>events-listener</module>
