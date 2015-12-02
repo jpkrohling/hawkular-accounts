@@ -88,10 +88,10 @@
               <artifactItems>
                 <artifactItem>
                   <groupId>org.hawkular.accounts</groupId>
-                  <artifactId>hawkular-accounts-distribution</artifactId>
+                  <artifactId>hawkular-accounts-feature-pack-dist</artifactId>
                   <type>zip</type>
                   <overWrite>false</overWrite>
-                  <outputDirectory>target</outputDirectory>
+                  <outputDirectory>target/hawkular-accounts-feature-pack-dist-${project.version}</outputDirectory>
                 </artifactItem>
               </artifactItems>
             </configuration>
@@ -99,31 +99,6 @@
         </executions>
       </plugin>
 
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>xml-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>adapt-wildfly-configuration</id>
-            <phase>process-test-resources</phase>
-            <goals>
-              <goal>transform</goal>
-            </goals>
-            <configuration>
-              <transformationSets>
-                <transformationSet>
-                  <dir>${project.basedir}/target/hawkular-accounts-distribution-${project.version}/standalone/configuration</dir>
-                  <stylesheet>${project.basedir}/src/test/resources/change-smtp-port.xsl</stylesheet>
-                  <includes>
-                    <include>standalone*.xml</include>
-                  </includes>
-                  <outputDir>${project.basedir}/target/hawkular-accounts-distribution-${project.version}/standalone/configuration</outputDir>
-                </transformationSet>
-              </transformationSets>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
     </plugins>
   </build>
 </project>

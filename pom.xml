@@ -46,6 +46,9 @@
     <module>secret-store-api</module>
     <module>secret-store</module>
     <module>undertow-filter</module>
+    <module>hawkular-accounts-feature-pack-resources</module>
+    <module>hawkular-accounts-feature-pack</module>
+    <module>hawkular-accounts-feature-pack-dist</module>
   </modules>
 
   <inceptionYear>2015</inceptionYear>
@@ -264,7 +267,6 @@
     <profile>
       <id>itest</id>
       <modules>
-        <module>dist</module>
         <module>integration-tests</module>
       </modules>
     </profile>
