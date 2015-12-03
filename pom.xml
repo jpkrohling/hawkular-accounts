@@ -115,6 +115,9 @@
     <version.org.apache.cassandra>2.2.2</version.org.apache.cassandra>
     <version.org.mockito>1.10.19</version.org.mockito>
 
+    <!-- Temporary here, should go back to hawkular-parent once we know that this works -->
+    <version.org.keycloak>1.8.0.Final-SRC-revision-277faea1d0a23646e3d5d46c457cf6b3bcc5c4a2</version.org.keycloak>
+
     <failOnMissingWebXml>false</failOnMissingWebXml>
     <jboss.releases.repo.url>
       https://repository.jboss.org/nexus/service/local/staging/deploy/maven2/
