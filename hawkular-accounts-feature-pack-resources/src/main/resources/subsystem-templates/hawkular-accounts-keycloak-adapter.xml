@@ -31,7 +31,7 @@
       <use-resource-role-mappings>true</use-resource-role-mappings>
       <enable-cors>true</enable-cors>
       <enable-basic-auth>true</enable-basic-auth>
-      <credential name="secret">9fd5e75c-9e39-4091-9fc9-085e3a7ad335</credential>
+      <credential name="secret">${uuid.hawkular.accounts.backend}</credential>
     </secure-deployment>
     <secure-deployment name="hawkular-accounts-secret-store.war">
       <realm>hawkular</realm>
@@ -39,7 +39,7 @@
       <use-resource-role-mappings>true</use-resource-role-mappings>
       <enable-cors>true</enable-cors>
       <enable-basic-auth>true</enable-basic-auth>
-      <credential name="secret">9fd5e75c-9e39-4091-9fc9-085e3a7ad335</credential>
+      <credential name="secret">${uuid.hawkular.accounts.backend}</credential>
     </secure-deployment>
   </subsystem>
 </config>

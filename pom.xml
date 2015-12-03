@@ -294,11 +294,20 @@
             <configuration>
               <source>
                 import java.util.UUID
-                def uuidBackend = UUID.randomUUID().toString()
-                def uuidUi = UUID.randomUUID().toString()
-                project.properties.setProperty('uuid.hawkular.accounts.backend', uuidBackend.toString())
-                project.properties.setProperty('uuid.hawkular.ui', uuidUi.toString())
-                project.properties.setProperty('uuid.hawkular.secretstore', uuidUi.toString())
+                def uuidBackend = System.getProperty("uuid.hawkular.accounts.backend")
+                if (uuidBackend == null) {
+                    uuidBackend = UUID.randomUUID().toString()
+                    System.setProperty("uuid.hawkular.accounts.backend", uuidBackend)
+                }
+                def uuidUi = System.getProperty("uuid.hawkular.ui")
+                if (uuidUi == null) {
+                    uuidUi = UUID.randomUUID().toString()
+                    System.setProperty("uuid.hawkular.ui", uuidUi)
+                }
+                print "Set uuid.hawkular.accounts.backend = " + uuidBackend
+                project.properties.setProperty('uuid.hawkular.accounts.backend', uuidBackend)
+                project.properties.setProperty('uuid.hawkular.ui', uuidUi)
+                project.properties.setProperty('uuid.hawkular.secretstore', uuidUi)
               </source>
             </configuration>
           </execution>

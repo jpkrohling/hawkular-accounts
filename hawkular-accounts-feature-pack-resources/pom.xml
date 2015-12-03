@@ -35,4 +35,23 @@
     subsystem-templates by wildfly-server-provisioning-maven-plugin.
     Once Hawkular Accounts will have a subsystem or a WildFly module, the resources hosted here can move there.
   </description>
+
+  <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+        <includes>
+          <include>**/*.xml</include>
+        </includes>
+      </resource>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>false</filtering>
+        <excludes>
+          <exclude>**/*.xml</exclude>
+        </excludes>
+      </resource>
+    </resources>
+  </build>
 </project>

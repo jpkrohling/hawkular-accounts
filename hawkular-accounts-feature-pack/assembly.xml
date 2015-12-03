@@ -28,6 +28,19 @@
   <fileSets>
     <fileSet>
       <directory>target/${project.artifactId}-${project.version}</directory>
+      <excludes>
+        <!-- hawkular-realm*json needs filtering -->
+        <exclude>**/hawkular-realm*json</exclude>
+      </excludes>
+      <outputDirectory/>
+    </fileSet>
+    <fileSet>
+      <directory>target/${project.artifactId}-${project.version}</directory>
+      <includes>
+        <!-- hawkular-realm*json needs filtering -->
+        <include>**/hawkular-realm*json</include>
+      </includes>
+      <filtered>true</filtered>
       <outputDirectory/>
     </fileSet>
   </fileSets>
