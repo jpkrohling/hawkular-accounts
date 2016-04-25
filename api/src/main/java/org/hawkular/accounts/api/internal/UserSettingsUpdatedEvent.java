@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Red Hat, Inc. and/or its affiliates
+ * Copyright 2015-2016 Red Hat, Inc. and/or its affiliates
  * and other contributors as indicated by the @author tags.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,11 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-.navbar-title {
-    background-image: url('../img/red-hat-logo.png');
-    height: 65px;
-    background-repeat: no-repeat;
-    width: 203px;
-    margin: 3px 10px 5px;
-    text-indent: -99999px;
+package org.hawkular.accounts.api.internal;
+
+import org.hawkular.accounts.api.model.UserSettings;
+
+/**
+ * @author Juraci Paixão Kröhling
+ */
+public class UserSettingsUpdatedEvent {
+    UserSettings settings;
+
+    public UserSettingsUpdatedEvent(UserSettings settings) {
+        this.settings = settings;
+    }
+
+    public UserSettings getSettings() {
+        return settings;
+    }
+
+    public void setSettings(UserSettings settings) {
+        this.settings = settings;
+    }
 }

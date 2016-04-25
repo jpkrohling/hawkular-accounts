@@ -40,16 +40,12 @@
     <module>events-backend</module>
     <module>events-listener</module>
     <module>jaxb-adapters</module>
-    <module>keycloak-event-listener-rest</module>
-    <module>keycloak-event-listener-jms</module>
-    <module>keycloak-theme</module>
     <module>feature-pack</module>
     <module>integration-tests</module>
     <module>sample</module>
     <module>sample-websocket-secured</module>
     <module>sample-websocket-backend</module>
     <module>sample-websocket-frontend</module>
-    <module>hawkular-accounts-secret-store</module>
   </modules>
 
   <inceptionYear>2015</inceptionYear>
@@ -115,13 +111,7 @@
 
   <properties>
     <version.com.icegreen.greenmail>1.4.1</version.com.icegreen.greenmail>
-
     <version.org.hawkular.commons>0.6.1.Final</version.org.hawkular.commons>
-    <version.org.keycloak.secretstore>1.0.15.Final</version.org.keycloak.secretstore>
-
-    <!-- Accounts should be the only place where the KeyCloak version is defined -->
-    <version.org.keycloak>1.9.1.Final</version.org.keycloak>
-
     <version.org.wildfly.arquillian>2.0.0.Alpha1</version.org.wildfly.arquillian>
 
     <failOnMissingWebXml>false</failOnMissingWebXml>
@@ -151,64 +141,6 @@
         <scope>import</scope>
       </dependency>
       <dependency>
-        <groupId>org.keycloak</groupId>
-        <artifactId>keycloak-core</artifactId>
-        <version>${version.org.keycloak}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.keycloak</groupId>
-        <artifactId>keycloak-adapter-feature-pack</artifactId>
-        <version>${version.org.keycloak}</version>
-        <type>zip</type>
-      </dependency>
-      <dependency>
-        <groupId>org.keycloak</groupId>
-        <artifactId>keycloak-server-feature-pack</artifactId>
-        <version>${version.org.keycloak}</version>
-        <type>zip</type>
-      </dependency>
-      <dependency>
-        <groupId>org.keycloak</groupId>
-        <artifactId>keycloak-war-dist-all</artifactId>
-        <version>${version.org.keycloak}</version>
-        <type>zip</type>
-        <exclusions>
-          <exclusion>
-            <groupId>org.keycloak</groupId>
-            <artifactId>keycloak-tomcat7-adapter-dist</artifactId>
-          </exclusion>
-          <exclusion>
-            <groupId>org.keycloak</groupId>
-            <artifactId>keycloak-example-themes-dist</artifactId>
-          </exclusion>
-          <exclusion>
-            <groupId>org.keycloak</groupId>
-            <artifactId>keycloak-eap6-adapter-dist</artifactId>
-          </exclusion>
-          <exclusion>
-            <groupId>org.keycloak</groupId>
-            <artifactId>keycloak-wildfly-adapter-dist</artifactId>
-          </exclusion>
-          <exclusion>
-            <groupId>org.keycloak</groupId>
-            <artifactId>keycloak-as7-adapter-dist</artifactId>
-          </exclusion>
-        </exclusions>
-      </dependency>
-      <dependency>
-        <groupId>org.keycloak</groupId>
-        <artifactId>keycloak-wildfly-adapter-dist</artifactId>
-        <version>${version.org.keycloak}</version>
-        <type>zip</type>
-        <exclusions>
-          <exclusion>
-            <groupId>org.keycloak</groupId>
-            <artifactId>keycloak-undertow-adapter</artifactId>
-          </exclusion>
-        </exclusions>
-      </dependency>
-
-      <dependency>
         <groupId>org.hawkular.commons</groupId>
         <artifactId>hawkular-commons-email</artifactId>
         <version>${version.org.hawkular.commons}</version>
@@ -226,20 +158,6 @@
         <artifactId>hawkular-rest-status</artifactId>
         <version>${version.org.hawkular.commons}</version>
       </dependency>
-
-      <dependency>
-        <groupId>org.keycloak.secretstore</groupId>
-        <artifactId>secret-store-undertow-filter</artifactId>
-        <version>${version.org.keycloak.secretstore}</version>
-      </dependency>
-
-      <dependency>
-        <groupId>org.keycloak.secretstore</groupId>
-        <artifactId>secret-store</artifactId>
-        <type>war</type>
-        <version>${version.org.keycloak.secretstore}</version>
-      </dependency>
-
     </dependencies>
   </dependencyManagement>
 
@@ -251,49 +169,6 @@
       </testResource>
     </testResources>
     <plugins>
-      <plugin>
-        <groupId>org.codehaus.gmavenplus</groupId>
-        <artifactId>gmavenplus-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>set-custom-property</id>
-            <phase>initialize</phase>
-            <goals>
-              <goal>execute</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <scripts>
-            <script><![CDATA[
-              import java.util.UUID
-              def uuidBackend = System.getProperty("uuid.hawkular.accounts.backend")
-              if (uuidBackend == null) {
-                  uuidBackend = UUID.randomUUID().toString()
-                  System.setProperty("uuid.hawkular.accounts.backend", uuidBackend)
-              }
-              def uuidUi = System.getProperty("uuid.hawkular.ui")
-              if (uuidUi == null) {
-                  uuidUi = UUID.randomUUID().toString()
-                  System.setProperty("uuid.hawkular.ui", uuidUi)
-              }
-              print "Set uuid.hawkular.accounts.backend = " + uuidBackend
-              project.properties.setProperty('uuid.hawkular.accounts.backend', uuidBackend)
-              project.properties.setProperty('uuid.hawkular.ui', uuidUi)
-              project.properties.setProperty('uuid.hawkular.secretstore', uuidUi)
-            ]]></script>
-          </scripts>
-        </configuration>
-        <dependencies>
-          <dependency>
-            <groupId>org.codehaus.groovy</groupId>
-            <artifactId>groovy-all</artifactId>
-            <version>${version.org.codehaus.groovy}</version>
-            <scope>runtime</scope>
-          </dependency>
-        </dependencies>
-      </plugin>
-
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-war-plugin</artifactId>

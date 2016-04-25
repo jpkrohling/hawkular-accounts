@@ -33,7 +33,6 @@ import org.hawkular.accounts.api.UserService;
 import org.hawkular.accounts.api.internal.BoundStatements;
 import org.hawkular.accounts.api.internal.NamedStatement;
 import org.hawkular.accounts.api.model.HawkularUser;
-import org.keycloak.KeycloakPrincipal;
 
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.Row;
@@ -48,6 +47,7 @@ import com.datastax.driver.core.Row;
 @PermitAll
 public class UserServiceImpl extends BaseServiceImpl<HawkularUser> implements UserService {
     MsgLogger logger = MsgLogger.LOGGER;
+    private static final String EMAIL_SETTINGS_KEY = "email";
 
     @SuppressWarnings("EjbEnvironmentInspection") @Resource
     SessionContext sessionContext;
@@ -68,26 +68,17 @@ public class UserServiceImpl extends BaseServiceImpl<HawkularUser> implements Us
     @Override
     public HawkularUser getCurrent() {
         Principal p = sessionContext.getCallerPrincipal();
-        if (!(p instanceof KeycloakPrincipal)) {
-            logger.nonAuthRequestWantsPersona();
-            return null;
-        }
 
-        KeycloakPrincipal principal = (KeycloakPrincipal) p;
-        String id = principal.getName();
-        String name = principal.getKeycloakSecurityContext().getToken().getName();
-        String email = principal.getKeycloakSecurityContext().getToken().getEmail();
+        // if we have an UUID, we'll get an UUID
+        // if we have an username, we'll get an UUID based on the username
+        String id = UUID.nameUUIDFromBytes(p.getName().getBytes()).toString();
+        String name = p.getName();
+
         HawkularUser user = getOrCreateByIdAndName(id, name);
-
         boolean needsUpdate = false;
         if (!name.equals(user.getName())) {
             logger.settingUsersName(id, name, user.getName());
             user.setName(name);
-            needsUpdate = true;
-        }
-        if (null != email && !email.equals(user.getEmail())) {
-            logger.settingUsersEmail(id, email, user.getEmail());
-            user.setEmail(email);
             needsUpdate = true;
         }
 
@@ -140,7 +131,8 @@ public class UserServiceImpl extends BaseServiceImpl<HawkularUser> implements Us
         return user;
     }
 
-    private HawkularUser update(HawkularUser user) {
+    @Override
+    public HawkularUser update(HawkularUser user) {
         return update(
                 user,
                 stmtUpdateInstance.get()

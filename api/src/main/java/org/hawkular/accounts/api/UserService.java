@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Red Hat, Inc. and/or its affiliates
+ * Copyright 2015-2016 Red Hat, Inc. and/or its affiliates
  * and other contributors as indicated by the @author tags.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -77,4 +77,11 @@ public interface UserService {
      * @return an {@link HawkularUser} instance representing the user with the given ID. It's never null.
      */
     HawkularUser getOrCreateByIdAndName(String id, String name);
+
+    /**
+     * Attempts to update an user's data. This should only be used
+     * @param user
+     * @return
+     */
+    HawkularUser update(HawkularUser user);
 }

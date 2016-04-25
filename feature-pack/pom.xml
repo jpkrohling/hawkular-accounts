@@ -32,42 +32,9 @@
 
     <dependency>
       <groupId>org.hawkular.accounts</groupId>
-      <artifactId>hawkular-accounts-keycloak-event-listener-rest</artifactId>
-      <version>2.0.27.Final-SNAPSHOT</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.hawkular.accounts</groupId>
-      <artifactId>hawkular-accounts-keycloak-event-listener-jms</artifactId>
-      <version>2.0.27.Final-SNAPSHOT</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.hawkular.accounts</groupId>
       <artifactId>hawkular-accounts</artifactId>
       <version>2.0.27.Final-SNAPSHOT</version>
       <type>war</type>
-    </dependency>
-
-    <dependency>
-      <groupId>org.hawkular.accounts</groupId>
-      <artifactId>hawkular-accounts-events-backend</artifactId>
-      <version>2.0.27.Final-SNAPSHOT</version>
-      <type>war</type>
-    </dependency>
-
-    <dependency>
-      <groupId>org.hawkular.accounts</groupId>
-      <artifactId>hawkular-accounts-secret-store</artifactId>
-      <version>2.0.27.Final-SNAPSHOT</version>
-      <type>war</type>
-    </dependency>
-
-    <dependency>
-      <groupId>org.hawkular.accounts</groupId>
-      <artifactId>hawkular-accounts-keycloak-theme</artifactId>
-      <version>2.0.27.Final-SNAPSHOT</version>
-      <type>jar</type>
     </dependency>
 
     <dependency>
@@ -81,31 +48,6 @@
         </exclusion>
       </exclusions>
     </dependency>
-
-    <dependency>
-      <groupId>org.keycloak</groupId>
-      <artifactId>keycloak-server-feature-pack</artifactId>
-      <type>zip</type>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-
-    <dependency>
-      <groupId>org.keycloak</groupId>
-      <artifactId>keycloak-adapter-feature-pack</artifactId>
-      <type>zip</type>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-
   </dependencies>
 
   <build>
@@ -141,41 +83,6 @@
                     look for feature-pack-resources/*.xml also in FPs that the primary FP depends on -->
                   <outputDirectory>${project.build.directory}/feature-pack-resources</outputDirectory>
                 </artifactItem>
-                <artifactItem>
-                  <groupId>org.keycloak</groupId>
-                  <artifactId>keycloak-server-feature-pack</artifactId>
-                  <type>zip</type>
-                  <includes>**/*.xml</includes>
-                  <outputDirectory>${project.build.directory}/feature-pack-resources-keycloak-server</outputDirectory>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.keycloak</groupId>
-                  <artifactId>keycloak-adapter-feature-pack</artifactId>
-                  <type>zip</type>
-                  <includes>**/*.xml</includes>
-                  <outputDirectory>${project.build.directory}/feature-pack-resources-keycloak-adapter</outputDirectory>
-                </artifactItem>
-
-                <artifactItem>
-                  <groupId>org.wildfly</groupId>
-                  <artifactId>wildfly-ejb3</artifactId>
-                  <type>jar</type>
-                  <version>${version.org.wildfly}</version>
-                  <includes>subsystem-templates/*.xml</includes>
-                  <outputDirectory>${project.build.directory}/upstream-subsystem-templates</outputDirectory>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.wildfly</groupId>
-                  <artifactId>wildfly-messaging-activemq</artifactId>
-                  <includes>subsystem-templates/*.xml</includes>
-                  <outputDirectory>${project.build.directory}/upstream-subsystem-templates</outputDirectory>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.wildfly</groupId>
-                  <artifactId>wildfly-security</artifactId>
-                  <includes>subsystem-templates/*.xml</includes>
-                  <outputDirectory>${project.build.directory}/upstream-subsystem-templates</outputDirectory>
-                </artifactItem>
               </artifactItems>
             </configuration>
           </execution>
@@ -198,16 +105,6 @@
                 <transformationSet>
                   <dir>${project.build.directory}/feature-pack-resources-hawkular-nest</dir>
                   <stylesheet>${basedir}/src/main/xsl/configuration/standalone/hawkular-accounts-subsystems.xsl</stylesheet>
-                  <parameters>
-                    <parameter>
-                      <name>kc-adapter-subsystems-path</name>
-                      <value>${project.build.directory}/feature-pack-resources-keycloak-adapter/configuration/standalone/subsystems.xml</value>
-                    </parameter>
-                    <parameter>
-                      <name>kc-server-subsystems-path</name>
-                      <value>${project.build.directory}/feature-pack-resources-keycloak-server/configuration/standalone/subsystems.xml</value>
-                    </parameter>
-                  </parameters>
                   <includes>
                     <include>configuration/standalone/hawkular-nest-subsystems.xml</include>
                   </includes>
@@ -222,16 +119,6 @@
                 <transformationSet>
                   <dir>${project.build.directory}/feature-pack-resources-hawkular-nest</dir>
                   <stylesheet>${basedir}/src/main/xsl/configuration/standalone/hawkular-accounts-template.xsl</stylesheet>
-                  <parameters>
-                    <parameter>
-                      <name>kc-adapter-template-path</name>
-                      <value>${project.build.directory}/feature-pack-resources-keycloak-adapter/configuration/standalone/template.xml</value>
-                    </parameter>
-                    <parameter>
-                      <name>kc-server-template-path</name>
-                      <value>${project.build.directory}/feature-pack-resources-keycloak-server/configuration/standalone/template.xml</value>
-                    </parameter>
-                  </parameters>
                   <includes>
                     <include>configuration/standalone/hawkular-nest-template.xml</include>
                   </includes>
@@ -240,49 +127,6 @@
                     <fileMapper implementation="org.codehaus.plexus.components.io.filemappers.RegExpFileMapper">
                       <pattern>^.*$</pattern>
                       <replacement>configuration/standalone/hawkular-accounts-template.xml</replacement>
-                    </fileMapper>
-                  </fileMappers>
-                </transformationSet>
-
-                <transformationSet>
-                  <dir>${project.build.directory}/upstream-subsystem-templates</dir>
-                  <stylesheet>${basedir}/src/main/xsl/subsystem-templates/hawkular-accounts-ejb3.xsl</stylesheet>
-                  <includes>
-                    <include>subsystem-templates/ejb3.xml</include>
-                  </includes>
-                  <outputDir>${project.build.directory}/feature-pack-resources</outputDir>
-                  <fileMappers>
-                    <fileMapper implementation="org.codehaus.plexus.components.io.filemappers.RegExpFileMapper">
-                      <pattern>^subsystem-templates/(.*)\.xml$</pattern>
-                      <replacement>subsystem-templates/hawkular-accounts-$1.xml</replacement>
-                    </fileMapper>
-                  </fileMappers>
-                </transformationSet>
-                <transformationSet>
-                  <dir>${project.build.directory}/upstream-subsystem-templates</dir>
-                  <stylesheet>${basedir}/src/main/xsl/subsystem-templates/hawkular-accounts-messaging-activemq.xsl</stylesheet>
-                  <includes>
-                    <include>subsystem-templates/messaging-activemq.xml</include>
-                  </includes>
-                  <outputDir>${project.build.directory}/feature-pack-resources</outputDir>
-                  <fileMappers>
-                    <fileMapper implementation="org.codehaus.plexus.components.io.filemappers.RegExpFileMapper">
-                      <pattern>^subsystem-templates/(.*)\.xml$</pattern>
-                      <replacement>subsystem-templates/hawkular-accounts-$1.xml</replacement>
-                    </fileMapper>
-                  </fileMappers>
-                </transformationSet>
-                <transformationSet>
-                  <dir>${project.build.directory}/upstream-subsystem-templates</dir>
-                  <stylesheet>${basedir}/src/main/xsl/subsystem-templates/hawkular-accounts-security.xsl</stylesheet>
-                  <includes>
-                    <include>subsystem-templates/security.xml</include>
-                  </includes>
-                  <outputDir>${project.build.directory}/feature-pack-resources</outputDir>
-                  <fileMappers>
-                    <fileMapper implementation="org.codehaus.plexus.components.io.filemappers.RegExpFileMapper">
-                      <pattern>^subsystem-templates/(.*)\.xml$</pattern>
-                      <replacement>subsystem-templates/hawkular-accounts-$1.xml</replacement>
                     </fileMapper>
                   </fileMappers>
                 </transformationSet>

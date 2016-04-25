@@ -81,6 +81,11 @@ class OrganizationsITest extends BaseSmokeTest {
         String organizationId = response.data.id
 
         RESTClient jsmithClient = getClientForUsernameAndPassword(username, password)
+
+        // we need to send emails, so, we set an email to these users
+        jsmithClient.put(path: "/hawkular/accounts/settings", body: [email: 'jsmith@hawkular.org'])
+        client.put(path: "/hawkular/accounts/settings", body: [email: 'jdoe@hawkular.org'])
+
         response = jsmithClient.post(path: "/hawkular/accounts/organizationJoinRequests/${organizationId}")
         String joinRequestId = response.data.id
 
@@ -97,7 +102,6 @@ class OrganizationsITest extends BaseSmokeTest {
         }
 
         RESTClient personaClient = getJdoeClientForPersona(organizationId)
-
         response = personaClient.put(
                 path: "/hawkular/accounts/organizationJoinRequests/${organizationId}",
                 body: [decision: 'ACCEPT', joinRequestId: joinRequestId]
@@ -244,6 +248,11 @@ class OrganizationsITest extends BaseSmokeTest {
         String organizationId = response.data.id
 
         RESTClient jsmithClient = getClientForUsernameAndPassword(username, password)
+
+        // we need to send emails, so, we set an email to this user
+        jsmithClient.put(path: "/hawkular/accounts/settings", body: [email: 'jsmith@hawkular.org'])
+        client.put(path: "/hawkular/accounts/settings", body: [email: 'jdoe@hawkular.org'])
+
         response = jsmithClient.post(path: "/hawkular/accounts/organizationJoinRequests/${organizationId}")
         String joinRequestId = response.data.id
 
@@ -261,7 +270,7 @@ class OrganizationsITest extends BaseSmokeTest {
         assertNotNull(joinRequestId)
         assertEquals('REJECTED', response.data.status)
 
-        assertTrue(greenMail.waitForIncomingEmail(5000, 1));
+        assertTrue(greenMail.waitForIncomingEmail(5000, 2));
         MimeMessage message = greenMail.receivedMessages[2];
         String expectedSubject = "[hawkular] - Join request declined";
         assertEquals("Should have received a rejection email", expectedSubject, message.getSubject())

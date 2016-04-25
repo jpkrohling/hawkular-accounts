@@ -97,11 +97,6 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.keycloak</groupId>
-      <artifactId>keycloak-core</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
       <groupId>org.infinispan</groupId>
       <artifactId>infinispan-core</artifactId>
       <scope>provided</scope>
@@ -120,10 +115,6 @@
       <groupId>org.jboss.logging</groupId>
       <artifactId>jboss-logging-processor</artifactId>
       <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.keycloak.secretstore</groupId>
-      <artifactId>secret-store-undertow-filter</artifactId>
     </dependency>
 
     <dependency>

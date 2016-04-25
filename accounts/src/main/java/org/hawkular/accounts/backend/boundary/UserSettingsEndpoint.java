@@ -20,6 +20,7 @@ import java.util.Map;
 
 import javax.annotation.security.PermitAll;
 import javax.ejb.Stateless;
+import javax.enterprise.event.Event;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -32,6 +33,7 @@ import javax.ws.rs.core.Response;
 
 import org.hawkular.accounts.api.CurrentUser;
 import org.hawkular.accounts.api.UserSettingsService;
+import org.hawkular.accounts.api.internal.UserSettingsUpdatedEvent;
 import org.hawkular.accounts.api.model.HawkularUser;
 import org.hawkular.accounts.api.model.UserSettings;
 import org.hawkular.accounts.backend.control.MsgLogger;
@@ -53,6 +55,9 @@ public class UserSettingsEndpoint {
     @Inject @CurrentUser
     Instance<HawkularUser> userInstance;
 
+    @Inject
+    Event<UserSettingsUpdatedEvent> userSettingsUpdatedEvent;
+
     @GET
     public Response getByUser() {
         HawkularUser user = userInstance.get();
@@ -67,6 +72,7 @@ public class UserSettingsEndpoint {
         properties.forEach((key, value) -> service.store(user, key, value));
         UserSettings settings = service.getByUser(user);
         logger.settingsForPersona(user.getId(), settings.size());
+        userSettingsUpdatedEvent.fire(new UserSettingsUpdatedEvent(settings));
         return Response.ok(settings.getProperties()).build();
     }
 }

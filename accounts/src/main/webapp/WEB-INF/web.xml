@@ -23,11 +23,6 @@
          version="3.0">
   <display-name>Hawkular Accounts</display-name>
 
-  <context-param>
-    <param-name>org.keycloak.secretstore.enabled</param-name>
-    <param-value>true</param-value>
-  </context-param>
-
   <security-constraint>
     <web-resource-collection>
       <web-resource-name>Status endpoint</web-resource-name>
@@ -45,11 +40,16 @@
     </auth-constraint>
   </security-constraint>
 
+  <login-config>
+    <auth-method>BASIC</auth-method>
+    <realm-name>ApplicationRealm</realm-name>
+  </login-config>
+
   <security-role>
-    <role-name>user</role-name>
+    <role-name>read-write</role-name>
   </security-role>
   <security-role>
-    <role-name>admin</role-name>
+    <role-name>read-only</role-name>
   </security-role>
 
 </web-app>

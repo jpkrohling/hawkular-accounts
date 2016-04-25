@@ -21,7 +21,6 @@
   <deployment>
     <dependencies>
       <module name="org.hawkular.commons.cassandra-driver"/>
-      <module name="org.freemarker"/>
     </dependencies>
   </deployment>
 </jboss-deployment-structure>
