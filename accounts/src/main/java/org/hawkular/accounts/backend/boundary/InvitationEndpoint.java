@@ -140,7 +140,7 @@ public class InvitationEndpoint {
             return Response.status(Response.Status.NOT_FOUND).entity(errorResponse).build();
         }
 
-        if (!permissionChecker.isAllowedTo(operationInvite, organization.getId())) {
+        if (!permissionChecker.isAllowedTo(operationInvite, organization.getId(), personaInstance.get())) {
             logger.notAllowedToPerformOperationOnResource(
                     operationInvite.getName(),
                     request.getOrganizationId(),

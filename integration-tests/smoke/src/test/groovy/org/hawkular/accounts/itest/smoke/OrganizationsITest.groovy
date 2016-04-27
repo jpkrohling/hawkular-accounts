@@ -25,6 +25,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
+import javax.inject.Inject
 import javax.mail.internet.MimeMessage
 
 import static org.junit.Assert.assertEquals

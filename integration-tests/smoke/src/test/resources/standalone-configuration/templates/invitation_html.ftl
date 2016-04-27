@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
+<#--
 
     Copyright 2015-2016 Red Hat, Inc. and/or its affiliates
     and other contributors as indicated by the @author tags.
@@ -17,18 +16,12 @@
     limitations under the License.
 
 -->
-<build xmlns="urn:wildfly:feature-pack-build:1.1">
-  <dependencies>
-    <artifact name="org.hawkular.commons:hawkular-nest-feature-pack" />
-  </dependencies>
+You have been invited to join the organization ${orgName}
 
-  <config>
-    <standalone template="configuration/standalone/hawkular-accounts-template.xml" subsystems="configuration/standalone/hawkular-accounts-subsystems.xml"
-      output-file="standalone/configuration/standalone.xml" />
-  </config>
+To accept this invitation, simply click on the link below.
+If you don't have an account yet, don't worry: just click on the link below and register for a new account.
 
-  <copy-artifacts>
-    <copy-artifact artifact="org.hawkular.accounts:hawkular-accounts" to-location="modules/system/layers/hawkular/org/hawkular/nest/main/deployments/hawkular-accounts.war" />
-  </copy-artifacts>
+${acceptUrl}
 
-</build>
+This invitation was submitted to you by ${invitedBy}
+

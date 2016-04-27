@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 
     Copyright 2015-2016 Red Hat, Inc. and/or its affiliates
@@ -16,12 +17,14 @@
     limitations under the License.
 
 -->
-<server-provisioning xmlns="urn:wildfly:server-provisioning:1.1"
-                     extract-schemas="true"
-                     copy-module-artifacts="true">
-  <feature-packs>
-    <feature-pack groupId="org.hawkular.commons"
-                  artifactId="hawkular-nest-feature-pack"
-                  version="${version.org.hawkular.commons}" />
-  </feature-packs>
-</server-provisioning>
+<beans
+    xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+      http://xmlns.jcp.org/xml/ns/javaee
+      http://xmlns.jcp.org/xml/ns/javaee/beans_1_1.xsd" bean-discovery-mode="all">
+  <alternatives>
+    <class>org.hawkular.accounts.backend.test.ProducersForTest</class>
+  </alternatives>
+</beans>
+

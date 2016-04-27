@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <!--
 
     Copyright 2015-2016 Red Hat, Inc. and/or its affiliates
@@ -17,17 +16,24 @@
     limitations under the License.
 
 -->
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:xalan="http://xml.apache.org/xalan"
+                version="2.0"
+                exclude-result-prefixes="xalan j">
 
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan" version="2.0" exclude-result-prefixes="xalan">
+  <xsl:output method="xml" version="1.0" encoding="UTF-8" indent="yes" xalan:indent-amount="4" standalone="no"/>
 
-  <xsl:output method="xml" version="1.0" encoding="UTF-8" indent="yes" xalan:indent-amount="4" standalone="no" />
-  <xsl:strip-space elements="*" />
-
-  <!-- copy everything else as-is -->
-  <xsl:template match="node()|@*">
+  <xsl:template match="node()[name(.)='outbound-socket-binding']">
     <xsl:copy>
-      <xsl:apply-templates select="node()|@*" />
+      <xsl:copy-of select="@*"/>
+      <remote-destination host="localhost" port="3025"/>
     </xsl:copy>
   </xsl:template>
 
+  <!-- Everything else remains the same -->
+  <xsl:template match="@*|node()">
+    <xsl:copy>
+      <xsl:apply-templates select="@*|node()" />
+    </xsl:copy>
+  </xsl:template>
 </xsl:stylesheet>

@@ -1,4 +1,4 @@
-<!--
+<#--
 
     Copyright 2015-2016 Red Hat, Inc. and/or its affiliates
     and other contributors as indicated by the @author tags.
@@ -16,12 +16,6 @@
     limitations under the License.
 
 -->
-<server-provisioning xmlns="urn:wildfly:server-provisioning:1.1"
-                     extract-schemas="true"
-                     copy-module-artifacts="true">
-  <feature-packs>
-    <feature-pack groupId="org.hawkular.commons"
-                  artifactId="hawkular-nest-feature-pack"
-                  version="${version.org.hawkular.commons}" />
-  </feature-packs>
-</server-provisioning>
+Hello ${requestor},
+
+Your request to join the organization ${orgName} has been rejected.

@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Red Hat, Inc. and/or its affiliates
+ * Copyright 2015-2016 Red Hat, Inc. and/or its affiliates
  * and other contributors as indicated by the @author tags.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,6 +18,7 @@ package org.hawkular.accounts.itest.smoke
 
 import com.icegreen.greenmail.junit.GreenMailRule
 import com.icegreen.greenmail.util.ServerSetupTest
+import org.jboss.arquillian.container.test.api.RunAsClient
 import org.jboss.arquillian.junit.Arquillian
 import org.junit.Rule
 import org.junit.Test

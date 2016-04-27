@@ -40,7 +40,6 @@
     <module>events-backend</module>
     <module>events-listener</module>
     <module>jaxb-adapters</module>
-    <module>feature-pack</module>
     <module>integration-tests</module>
     <module>sample</module>
     <module>sample-websocket-secured</module>
@@ -112,7 +111,7 @@
   <properties>
     <version.com.icegreen.greenmail>1.4.1</version.com.icegreen.greenmail>
     <version.org.hawkular.commons>0.6.1.Final</version.org.hawkular.commons>
-    <version.org.wildfly.arquillian>2.0.0.Alpha1</version.org.wildfly.arquillian>
+    <version.org.wildfly.arquillian>2.0.0.Final</version.org.wildfly.arquillian>
 
     <failOnMissingWebXml>false</failOnMissingWebXml>
     <jboss.releases.repo.url>
@@ -140,6 +139,7 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
+
       <dependency>
         <groupId>org.hawkular.commons</groupId>
         <artifactId>hawkular-commons-email</artifactId>
@@ -157,6 +157,54 @@
         <groupId>org.hawkular.commons</groupId>
         <artifactId>hawkular-rest-status</artifactId>
         <version>${version.org.hawkular.commons}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>com.icegreen</groupId>
+        <artifactId>greenmail</artifactId>
+        <version>${version.com.icegreen.greenmail}</version>
+        <scope>test</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>org.jboss.arquillian.junit</groupId>
+        <artifactId>arquillian-junit-container</artifactId>
+        <scope>test</scope>
+        <version>1.1.10.Final</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.wildfly.arquillian</groupId>
+        <artifactId>wildfly-arquillian-container-managed</artifactId>
+        <scope>test</scope>
+        <version>2.0.0.Final</version>
+      </dependency>
+      <dependency>
+        <groupId>org.wildfly.arquillian</groupId>
+        <artifactId>wildfly-arquillian-common</artifactId>
+        <scope>test</scope>
+        <version>2.0.0.Final</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.jboss.shrinkwrap.resolver</groupId>
+        <artifactId>shrinkwrap-resolver-api</artifactId>
+        <scope>test</scope>
+        <version>2.2.2</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.jboss.shrinkwrap.resolver</groupId>
+        <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
+        <scope>test</scope>
+        <version>2.2.2</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.mockito</groupId>
+        <artifactId>mockito-all</artifactId>
+        <scope>test</scope>
+        <version>1.10.19</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
