@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
+<#--
 
     Copyright 2015-2016 Red Hat, Inc. and/or its affiliates
     and other contributors as indicated by the @author tags.
@@ -17,17 +16,12 @@
     limitations under the License.
 
 -->
+You have been invited to join the organization ${orgName}
 
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan" version="2.0" exclude-result-prefixes="xalan">
+To accept this invitation, simply click on the link below.
+If you don't have an account yet, don't worry: just click on the link below and register for a new account.
 
-  <xsl:output method="xml" version="1.0" encoding="UTF-8" indent="yes" xalan:indent-amount="4" standalone="no" />
-  <xsl:strip-space elements="*" />
+${acceptUrl}
 
-  <!-- copy everything else as-is -->
-  <xsl:template match="node()|@*">
-    <xsl:copy>
-      <xsl:apply-templates select="node()|@*" />
-    </xsl:copy>
-  </xsl:template>
+This invitation was submitted to you by ${invitedBy}
 
-</xsl:stylesheet>

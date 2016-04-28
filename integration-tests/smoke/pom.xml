@@ -40,6 +40,13 @@
 
   <dependencies>
     <dependency>
+      <groupId>org.hawkular.accounts</groupId>
+      <artifactId>hawkular-accounts</artifactId>
+      <version>2.0.27.Final-SNAPSHOT</version>
+      <type>war</type>
+    </dependency>
+
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <scope>test</scope>
@@ -162,6 +169,29 @@
                   <filtering>true</filtering>
                 </resource>
               </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy-accounts-war-to-nest</id>
+            <phase>process-test-resources</phase>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>org.hawkular.accounts</groupId>
+                  <artifactId>hawkular-accounts</artifactId>
+                  <type>war</type>
+                  <outputDirectory>${project.basedir}/target/hawkular-accounts-integration-tests-smoke-${project.version}/modules/system/layers/hawkular/org/hawkular/nest/main/deployments</outputDirectory>
+                </artifactItem>
+              </artifactItems>
             </configuration>
           </execution>
         </executions>

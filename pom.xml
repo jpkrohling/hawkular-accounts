@@ -40,7 +40,6 @@
     <module>events-backend</module>
     <module>events-listener</module>
     <module>jaxb-adapters</module>
-    <module>feature-pack</module>
     <module>integration-tests</module>
     <module>sample</module>
     <module>sample-websocket-secured</module>
